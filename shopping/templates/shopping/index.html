@@ -1,0 +1,14 @@
+{% extends "shopping/layout.html" %}
+
+{% block body %}
+    <h1>Items</h1>
+    <ul>
+        {% for item in shop_list %}
+            <li>{{item}}</li>
+
+        {% endfor %}
+    </ul>
+    <a href="{% url 'shopping:add page' %}"> Add a new item <a>
+{% endblock %}
+
+
