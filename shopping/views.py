@@ -8,12 +8,15 @@ from django.http import HttpResponseRedirect
 class NewItemForm(forms.Form):
     item = forms.CharField(label="New Item")
 
-shop_list = ["bread", "butter", "cheese"]
+# shop_list = ["bread", "butter", "cheese"]
 
 def index(request):
+    if "shop_list" not in request.session:
+        request.session["shop_list"] = []
+
     return render(request, "shopping/index.html",
                   {
-                   "shop_list":shop_list,
+                   "shop_list":request.session.get("shop_list"),
                    "title":"Items"   
                   })
 
@@ -30,10 +33,10 @@ def add(request):
         if form.is_valid():
             item = form.cleaned_data["item"]
 
-            shop_list.append(item)
+            request.session["shop_list"] += [item]
 
-            # return redirect("shopping:index")
-            return HttpResponseRedirect(reverse("shopping:index"))
+            return redirect("shopping:index")
+            # return HttpResponseRedirect(reverse("shopping:index"))
 
     return render(request, "shopping/add.html", {
         "form":NewItemForm()
